@@ -1,0 +1,19 @@
+{
+  "name": "seedfast",
+  "owner": {
+    "name": "Seedfast",
+    "email": "support@seedfa.st",
+    "url": "https://seedfa.st"
+  },
+  "metadata": {
+    "description": "Official Claude Code plugins for Seedfast — realistic, relationally valid PostgreSQL test data generated from a live schema",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "seedfast",
+      "source": "./plugins/seedfast",
+      "description": "Seeds a PostgreSQL database with realistic, relationally valid test data from a plain-English scope. Bundles the Seedfast MCP server and the plan-before-run workflow that keeps seeding safe."
+    }
+  ]
+}

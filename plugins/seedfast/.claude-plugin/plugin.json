@@ -1,0 +1,37 @@
+{
+  "name": "seedfast",
+  "displayName": "Seedfast",
+  "version": "1.0.0",
+  "description": "Seeds a PostgreSQL database with realistic, relationally valid test data from a plain-English scope. Bundles the Seedfast MCP server and the plan-before-run workflow that keeps seeding safe.",
+  "author": {
+    "name": "Seedfast",
+    "email": "support@seedfa.st",
+    "url": "https://seedfa.st"
+  },
+  "homepage": "https://seedfa.st/docs",
+  "repository": "https://github.com/seedfast-ai/claude-plugins",
+  "license": "MIT",
+  "keywords": [
+    "postgresql",
+    "test-data",
+    "synthetic-data",
+    "database",
+    "seeding",
+    "mcp"
+  ],
+  "userConfig": {
+    "api_key": {
+      "type": "string",
+      "title": "Seedfast API key",
+      "description": "Created at https://seedfa.st/dashboard. Starts with sfk_. Required for planning and running seedings; schema introspection and connection tests work without it.",
+      "required": true,
+      "sensitive": true
+    },
+    "runs_db": {
+      "type": "string",
+      "title": "Run history file (optional)",
+      "description": "Absolute path to a SQLite file where plans and run history are kept. Leave blank to keep them in memory, which means they disappear when the MCP server exits.",
+      "required": false
+    }
+  }
+}

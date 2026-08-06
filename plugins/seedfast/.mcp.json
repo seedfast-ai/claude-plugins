@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "seedfast": {
+      "command": "npx",
+      "args": ["-y", "seedfast@latest", "mcp"],
+      "env": {
+        "SEEDFAST_API_KEY": "${user_config.api_key}",
+        "SEEDFAST_MCP_RUNS_DB": "${user_config.runs_db}"
+      }
+    }
+  }
+}
