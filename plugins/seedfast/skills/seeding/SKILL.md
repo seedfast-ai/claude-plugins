@@ -1,6 +1,6 @@
 ---
 name: seeding
-description: Fill a PostgreSQL database with realistic, relationally valid test data using Seedfast. Use when the user wants to seed, populate, or fill a database, needs test/demo/staging data, has empty tables to work against, wants a dev database that behaves like production, or mentions Seedfast, fixtures, or synthetic data.
+description: Fill a PostgreSQL database with realistic, relationally valid test data using Seedfast. Use when the user wants to seed, populate, or fill a database, needs test/demo/staging data, has empty tables to work against, wants a dev database that behaves like production, or says "seed the database", "seed my database", "populate my postgres with test data", "fill the staging database", "generate test data for these tables", "my dev database is empty", "I need demo data", or mentions Seedfast, fixtures, or synthetic data.
 ---
 
 # Seeding a database with Seedfast
@@ -54,7 +54,7 @@ Show the user the table list and the scope before running. This is the whole poi
 
 - Pass `planId` to execute an approved plan. The scope is derived from the plan's tables and the `scope` argument is ignored.
 - Without `planId`, `scope` is required.
-- Pass `idempotencyKey` when a retry must not double-seed. A matching key returns the existing run instead of starting a new one.
+- Always pass an `idempotencyKey`. A retry carrying the same key returns the existing run instead of starting a new one, which is the difference between a dropped connection costing nothing and costing the user a doubled `orders` table.
 
 ### 6. Poll to completion
 
@@ -95,6 +95,16 @@ For more patterns, request the server's `scope-examples` prompt (`general`, `ci`
 **Cancellation does not roll back.** `seedfast_run_cancel` stops the run, but rows already inserted stay inserted. A cancelled run leaves a partially seeded database that someone has to clean up. Say so when you cancel.
 
 **`seedfast_plan_delete` is irreversible** and does not touch runs started from that plan.
+
+## Guardrails
+
+**Never invent a table name.** Every table a scope names comes from `seedfast_schema_info`. A guessed name produces nothing and reports nothing about having produced nothing.
+
+**Never read success out of the `seedfast_run` response.** That call returns before the first insert, carrying a run ID and `pending`. Only `seedfast_run_status` reporting `completed` describes a result.
+
+**Never start a second run to fix a slow one.** Poll it, or cancel it and then start a single run with a corrected scope. Two runs against the same tables leave a mess that has to be cleaned up by hand.
+
+**Counted rows are the only real evidence.** Once a run reports `completed`, run `SELECT count(*)` against the tables the scope named and put those numbers beside the ones the scope asked for. Status text describes what the backend thinks it did; the counts are what you report to the user.
 
 ## Plans
 
